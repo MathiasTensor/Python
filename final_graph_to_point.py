@@ -73,7 +73,7 @@ def interval_of_tolerance_diffpixel(x, tol):
     if x - tol <= x <= x + tol:
         return list(range(x - tol, x + tol))
     ###############################################################################
-# TO here OK
+
 def coord_in_lenght_and_tolerance(data, length, tol, color):
     # start of helper function definitons:
     ###############################################################################
@@ -95,7 +95,7 @@ def coord_in_lenght_and_tolerance(data, length, tol, color):
                 new_list.append(data[np.ix_([i], [int(k) for k in range(j, j + length)])][0, l])
                 continue
         return new_list
-    # end of function definitions:
+
     ###############################################################################
     list = []
     # Creating boundaries for summation in pixel_value
@@ -120,7 +120,7 @@ def coord_in_lenght_and_tolerance(data, length, tol, color):
                     break
     return(list)
     ###############################################################################
-# from here ok
+
 def graphing_function(type, list):
     #############################################################################
     """Graphing the resulting function in a figure of the original size
@@ -140,8 +140,7 @@ def graphing_function(type, list):
     plt.plot(list_x, list_y, type)
     plt.show()
     ###############################################################################
-# ending
-
+    
 def data_line_index(data, i, j, length):
     """Helper function that shortens notation of 1D
     subarray (data_line) in pixel_value and returns
