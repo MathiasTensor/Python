@@ -2,7 +2,8 @@ from PIL import Image, ImageFilter
 import numpy as np
 import matplotlib.pyplot as plt
 import re
-
+#################################################################################
+####            Only works for simple paint images for now                   ####
 #################################################################################
 q1 = input("Do you wish to get coord. of pic? (y/n)  ")
 q2 = input("Enter path: (e.g.: D:\Testna_mapa\slika3.jpg)  ")
@@ -35,7 +36,7 @@ def get_data(string, edge_crop_x, edge_crop_y):
     im = Image.open(string)
     (width, height) = im.size
     im = im.convert("L")
-    im = im.filter(ImageFilter.FIND_EDGES)
+    #im = im.filter(ImageFilter.FIND_EDGES)
     #im.show()
     pixel_value = list(im.getdata())
     if im.mode == "RGB":
@@ -50,7 +51,6 @@ def get_data(string, edge_crop_x, edge_crop_y):
     pixel_value = np.delete(pixel_value, list(range(pixel_value.shape[1] - edge_crop_x, pixel_value.shape[1])), axis=1)
     pixel_value = np.delete(pixel_value, list(range(0, edge_crop_y)), axis=0)
     pixel_value = np.delete(pixel_value, list(range(pixel_value.shape[0] - edge_crop_y, pixel_value.shape[0])), axis=0)
-    im.show()
     return pixel_value, pixel_value.shape
     ###############################################################################
 
@@ -95,7 +95,6 @@ def coord_in_lenght_and_tolerance(data, length, tol, color):
                 new_list.append(data[np.ix_([i], [int(k) for k in range(j, j + length)])][0, l])
                 continue
         return new_list
-
     ###############################################################################
     list = []
     # Creating boundaries for summation in pixel_value
@@ -121,7 +120,33 @@ def coord_in_lenght_and_tolerance(data, length, tol, color):
     return(list)
     ###############################################################################
 
-def graphing_function(type, list):
+def redundant_line_points(list):
+    ############################################################################
+    """This function eliminates x coordinate duplicates. Therefore it
+    provides a much smoother experience"""
+    new_list = []
+    list_of_x = []
+    for x in list:
+        if x[0] not in list_of_x:
+            new_list.append(x)
+            list_of_x.append(x[0])
+            continue
+        else:
+            continue
+    return(new_list)
+    #############################################################################
+
+def invert_y_axis(new_list):
+    ############################################################################
+    """This function inverts y values of coord. s.t. the final image makes sense"""
+    final_list = []
+    for (x, y) in new_list:
+        y = pixel_value.shape[0] - y
+        final_list.append((x, y))
+    return final_list
+    #############################################################################
+
+def graphing_function(type, final_list):
     #############################################################################
     """Graphing the resulting function in a figure of the original size
     type: "ro", "b-", ..."""
@@ -133,35 +158,27 @@ def graphing_function(type, list):
     plt.legend(["Imported graph"])
     list_x = []
     list_y = []
-    for u in list:
+    for u in final_list:
         list_x.append(u[0])
-    for z in list:
+    for z in final_list:
         list_y.append(z[1])
     plt.plot(list_x, list_y, type)
     plt.show()
     ###############################################################################
-    
-def data_line_index(data, i, j, length):
-    """Helper function that shortens notation of 1D
-    subarray (data_line) in pixel_value and returns
-    index value"""
-    new_list = []
-    for l in range(0, length):
-        if j + length < pixel_value.shape[1]:
-            new_list.append(data[np.ix_([i], [int(k) for k in range(j, j + length)])][0, l])
-            continue
-    return new_list
 
 ####################################################################################
 # Actual program
-if q1 == "y":
-    get_data(q2, q3, q4)
-    print("\nBelow is the L grid: ")
-    print(get_data(q2, q3, q4))
-    print("\nBelow are the points that satisfy your criteria: ")
-    print(print(coord_in_lenght_and_tolerance(pixel_value, q5, q6, 255)))
-    graphing_function("ro", coord_in_lenght_and_tolerance(pixel_value, q5, q6, 255))
-else:
-    print("Close the program.")
 
-#######################################################################################
+get_data(q2, q3, q4)
+print("\nBelow is the L grid: \n")
+print(get_data(q2, q3, q4))
+print("\nBelow are the points that satisfy your criteria: \n")
+print(coord_in_lenght_and_tolerance(pixel_value, 3, 50, 0))
+print("\nBelow is the new list of points that drop x coord. duplicates: \n")
+print(redundant_line_points(coord_in_lenght_and_tolerance(pixel_value, q5, q6, 0)))
+print("\nBelow is the new list of points that drop x coord. duplicates and y inverted values: \n")
+print(invert_y_axis(redundant_line_points(coord_in_lenght_and_tolerance(pixel_value, q5, q6, 0))))
+print("\nGraph displayed on screen! \n")
+graphing_function("ro", (redundant_line_points(coord_in_lenght_and_tolerance(pixel_value, q5, q6, 0))))
+
+######################################################################################
