@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import re
 #################################################################################
-####            Only works for simple paint images for now                   ####
+#### Only works for simple paint images for now, still in development        ####
 #################################################################################
 q1 = input("Do you wish to get coord. of pic? (y/n)  ")
 q2 = input("Enter path: (e.g.: D:\Testna_mapa\slika3.jpg)  ")
