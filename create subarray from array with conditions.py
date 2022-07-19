@@ -46,8 +46,8 @@ def matrix_of_subarrays(array, sz_box_x, sz_box_y):
     width = array.shape[1]
     list_new = []
     # append all the subarrays to list_new
-    for i in range(0, array.shape[0], sz_box_x):
-        for j in range(0, array.shape[1], sz_box_y):
+    for i in range(0, array.shape[1], sz_box_x):
+        for j in range(0, array.shape[0], sz_box_y):
             #(subarray_slice(array, i, j, sz_box_x, sz_box_y))
             list_new.append((subarray_slice(array, i, j, sz_box_x, sz_box_y)))
     np.array(list_new)
