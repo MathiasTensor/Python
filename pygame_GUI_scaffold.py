@@ -240,5 +240,5 @@ def app():
         pygame.display.update()
         # Frame ticks
         FramePerSec.tick(FPS)
-
-app()
+if __name___ == "__main__":
+    app()
